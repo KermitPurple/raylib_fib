@@ -1,7 +1,8 @@
 #include<iostream>
-using namespace std;
+#include<Fib.h>
 
 int main(){
-    cout << "Hello, World!" << endl;
+    Fib fib;
+    fib.run();
     return 0;
 }
