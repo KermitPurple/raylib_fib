@@ -24,6 +24,62 @@ void Fib::set_window_size(Vector2 size){
     center = Vector2{size.x / 2, size.y / 2};
 }
 
+void Fib::draw_spiral(){
+    Vector2 pos = center;
+    int prev_size = 0;
+    int size = STARTING_SIZE;
+    for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
+        int next_size = prev_size + size;
+        DrawRectangleLines(pos.x, pos.y, size, size, WHITE);
+        switch(i % 4){
+            case 0:
+                DrawLineBezierQuad(
+                        Vector2{pos.x, pos.y + size},
+                        Vector2{pos.x + size, pos.y},
+                        pos,
+                        1,
+                        WHITE
+                        );
+                pos.x += size;
+                break;
+            case 1:
+                DrawLineBezierQuad(
+                        pos,
+                        Vector2{pos.x + size, pos.y + size},
+                        Vector2{pos.x + size, pos.y},
+                        1,
+                        WHITE
+                        );
+                pos.x -= prev_size;
+                pos.y += size;
+                break;
+            case 2:
+                DrawLineBezierQuad(
+                        Vector2{pos.x + size, pos.y},
+                        Vector2{pos.x, pos.y + size},
+                        Vector2{pos.x + size, pos.y + size},
+                        1,
+                        WHITE
+                        );
+                pos.x -= next_size;
+                pos.y -= prev_size;
+                break;
+            case 3:
+                DrawLineBezierQuad(
+                        pos,
+                        Vector2{pos.x + size, pos.y + size},
+                        Vector2{pos.x, pos.y + size},
+                        1,
+                        WHITE
+                        );
+                pos.y -= next_size;
+                break;
+        }
+        prev_size = size;
+        size = next_size;
+    }
+}
+
 /************
 *  public  *
 ************/
@@ -43,6 +99,7 @@ void Fib::run(){
             set_window_size(),
         BeginDrawing(); // start the raylib drawing process
         ClearBackground(BLACK); // clear the screen
+        draw_spiral(); // draw the main spiral
         EndDrawing(); // finish the raylib drawing process
     }
 }
