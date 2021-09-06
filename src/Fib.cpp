@@ -5,10 +5,14 @@
 *  private  *
 *************/
 void Fib::set_window_size(){
+    // this sets the window size varaible,
+    // does not change the actual size of the window
     set_window_size(GetScreenWidth(), GetScreenHeight());
 }
 
 void Fib::set_window_size(int x, int y){
+    // this sets the window size varaible,
+    // does not change the actual size of the window
     set_window_size(
         static_cast<float>(x),
         static_cast<float>(y)
@@ -16,16 +20,20 @@ void Fib::set_window_size(int x, int y){
 }
 
 void Fib::set_window_size(float x, float y){
+    // this sets the window size varaible,
+    // does not change the actual size of the window
     set_window_size(Vector2{x, y});
 }
 
 void Fib::set_window_size(Vector2 size){
+    // this sets the window size varaible,
+    // does not change the actual size of the window
     window_size = size;
     center = Vector2{size.x / 2, size.y / 2};
 }
 
 void Fib::draw_spiral(){
-    Vector2 pos = center;
+    Vector2 pos = center; // start at the center of the screen
     int prev_size = 0;
     int size = STARTING_SIZE;
     for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
