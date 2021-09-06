@@ -1,9 +1,18 @@
-#include "raylib.h"
+#include"raylib.h"
 #include<Fib.h>
+#include<math.h>
 
 /*************
 *  private  *
 *************/
+
+void Fib::update_starting_size(){
+    //increase the starting size but reset it back 
+    starting_size *= STARTING_SIZE_SPEED;
+    if(starting_size >= STARTING_SIZE_ROLLOVER)
+        starting_size = STARTING_SIZE;
+}
+
 void Fib::set_window_size(){
     // this sets the window size varaible,
     // does not change the actual size of the window
@@ -34,12 +43,12 @@ void Fib::set_window_size(Vector2 size){
 
 void Fib::draw_spiral(){
     Vector2 pos = center; // start at the center of the screen
-    int prev_size = 0;
-    int size = STARTING_SIZE;
+    float prev_size = 0;
+    float size = starting_size;
     const int CURVE_POINTS_SIZE = 3; // number of points in curve
     Vector2 curve_points[CURVE_POINTS_SIZE]; // store points for drawing curve
     for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
-        int next_size = prev_size + size;
+        float next_size = prev_size + size;
         DrawRectangleLines(pos.x, pos.y, size, size, WHITE);
         switch(i % 4){
             case 0:
@@ -70,15 +79,22 @@ void Fib::draw_spiral(){
                 break;
         }
         DrawLineBezierQuad(
-                curve_points[0],
-                curve_points[1],
-                curve_points[2],
+                vec_floor(curve_points[0]),
+                vec_floor(curve_points[1]),
+                vec_floor(curve_points[2]),
                 1,
                 WHITE
                 );
         prev_size = size;
         size = next_size;
     }
+}
+
+Vector2 Fib::vec_floor(Vector2 vec){
+    return Vector2{
+        floor(vec.x),
+        floor(vec.y),
+    };
 }
 
 /************
@@ -97,7 +113,8 @@ void Fib::run(){
     SetTargetFPS(fps); // set the target fps
     while(!WindowShouldClose()){
         if(IsWindowResized()) // if the size of the window changed
-            set_window_size(),
+            set_window_size(); // set the window_size variable to the current size
+        update_starting_size(); // increase starting_size
         BeginDrawing(); // start the raylib drawing process
         ClearBackground(BLACK); // clear the screen
         draw_spiral(); // draw the main spiral
