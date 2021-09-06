@@ -20,7 +20,7 @@ private:
     void set_window_size(float x, float y);
     void set_window_size(Vector2 size);
     void draw_spiral();
-    Vector2 vec_floor(Vector2 vec);
+    Vector2 vec_ceil(Vector2 vec);
 public:
     Fib(); // default construtor
     void run(); // run the program

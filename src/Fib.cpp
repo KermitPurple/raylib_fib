@@ -49,7 +49,13 @@ void Fib::draw_spiral(){
     Vector2 curve_points[CURVE_POINTS_SIZE]; // store points for drawing curve
     for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
         float next_size = prev_size + size;
-        DrawRectangleLines(pos.x, pos.y, size, size, WHITE);
+        DrawRectangleLines(
+                ceil(pos.x),
+                ceil(pos.y),
+                ceil(size),
+                ceil(size),
+                WHITE
+                );
         switch(i % 4){
             case 0:
                 curve_points[0] = Vector2{pos.x, pos.y + size};
@@ -79,9 +85,9 @@ void Fib::draw_spiral(){
                 break;
         }
         DrawLineBezierQuad(
-                vec_floor(curve_points[0]),
-                vec_floor(curve_points[1]),
-                vec_floor(curve_points[2]),
+                vec_ceil(curve_points[0]),
+                vec_ceil(curve_points[1]),
+                vec_ceil(curve_points[2]),
                 1,
                 WHITE
                 );
@@ -90,10 +96,10 @@ void Fib::draw_spiral(){
     }
 }
 
-Vector2 Fib::vec_floor(Vector2 vec){
+Vector2 Fib::vec_ceil(Vector2 vec){
     return Vector2{
-        floor(vec.x),
-        floor(vec.y),
+        ceil(vec.x),
+        ceil(vec.y),
     };
 }
 
