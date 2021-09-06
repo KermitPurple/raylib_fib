@@ -2,6 +2,7 @@
 #define FIB_H
 
 #include<raylib.h>
+#include"DrawType.h"
 
 class Fib{
 private:
@@ -9,11 +10,13 @@ private:
     static constexpr Vector2 MINIMUM_WINDOW_SIZE{720, 380};
     static constexpr float STARTING_SIZE = 0.01;
     static constexpr float STARTING_SIZE_ROLLOVER = 3.3229712;
-    static constexpr float STARTING_SIZE_SPEED = 1.01;
+    static constexpr float STARTING_SIZE_SPEED = 1.05;
+    DrawType draw_type;
     Vector2 window_size;
     Vector2 center;
     int fps = 30;
     float starting_size = STARTING_SIZE;
+    void keyboard_input();
     void update_starting_size();
     void set_window_size();
     void set_window_size(int x, int y);

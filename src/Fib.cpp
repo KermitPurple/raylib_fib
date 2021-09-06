@@ -6,6 +6,21 @@
 *  private  *
 *************/
 
+void Fib::keyboard_input(){
+    int key = GetKeyPressed();
+    char ch = GetCharPressed();
+    switch(key){
+        case KEY_L:
+            draw_type.toggle_lines();
+            break;
+        case KEY_C:
+            draw_type.toggle_curves();
+            break;
+        default:
+            break;
+    }
+}
+
 void Fib::update_starting_size(){
     //increase the starting size but reset it back 
     starting_size *= STARTING_SIZE_SPEED;
@@ -49,13 +64,14 @@ void Fib::draw_spiral(){
     Vector2 curve_points[CURVE_POINTS_SIZE]; // store points for drawing curve
     for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
         float next_size = prev_size + size;
-        DrawRectangleLines(
-                ceil(pos.x),
-                ceil(pos.y),
-                ceil(size),
-                ceil(size),
-                WHITE
-                );
+        if(draw_type.get_lines())
+            DrawRectangleLines(
+                    ceil(pos.x),
+                    ceil(pos.y),
+                    ceil(size),
+                    ceil(size),
+                    WHITE
+                    );
         switch(i % 4){
             case 0:
                 curve_points[0] = Vector2{pos.x, pos.y + size};
@@ -84,13 +100,14 @@ void Fib::draw_spiral(){
                 pos.y -= next_size;
                 break;
         }
-        DrawLineBezierQuad(
-                vec_ceil(curve_points[0]),
-                vec_ceil(curve_points[1]),
-                vec_ceil(curve_points[2]),
-                1,
-                WHITE
-                );
+        if(draw_type.get_curves())
+            DrawLineBezierQuad(
+                    vec_ceil(curve_points[0]),
+                    vec_ceil(curve_points[1]),
+                    vec_ceil(curve_points[2]),
+                    1,
+                    WHITE
+                    );
         prev_size = size;
         size = next_size;
     }
@@ -121,6 +138,7 @@ void Fib::run(){
         if(IsWindowResized()) // if the size of the window changed
             set_window_size(); // set the window_size variable to the current size
         update_starting_size(); // increase starting_size
+        keyboard_input(); // handle the keyboard input
         BeginDrawing(); // start the raylib drawing process
         ClearBackground(BLACK); // clear the screen
         draw_spiral(); // draw the main spiral
