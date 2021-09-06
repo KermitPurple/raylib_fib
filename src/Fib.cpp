@@ -36,53 +36,46 @@ void Fib::draw_spiral(){
     Vector2 pos = center; // start at the center of the screen
     int prev_size = 0;
     int size = STARTING_SIZE;
+    const int CURVE_POINTS_SIZE = 3; // number of points in curve
+    Vector2 curve_points[CURVE_POINTS_SIZE]; // store points for drawing curve
     for(int i = 0; i < 100; i++){ // TODO Make this more effiecient by adding bounds checking
         int next_size = prev_size + size;
         DrawRectangleLines(pos.x, pos.y, size, size, WHITE);
         switch(i % 4){
             case 0:
-                DrawLineBezierQuad(
-                        Vector2{pos.x, pos.y + size},
-                        Vector2{pos.x + size, pos.y},
-                        pos,
-                        1,
-                        WHITE
-                        );
+                curve_points[0] = Vector2{pos.x, pos.y + size};
+                curve_points[1] = Vector2{pos.x + size, pos.y};
+                curve_points[2] = pos;
                 pos.x += size;
                 break;
             case 1:
-                DrawLineBezierQuad(
-                        pos,
-                        Vector2{pos.x + size, pos.y + size},
-                        Vector2{pos.x + size, pos.y},
-                        1,
-                        WHITE
-                        );
+                curve_points[0] = pos;
+                curve_points[1] = Vector2{pos.x + size, pos.y + size};
+                curve_points[2] = Vector2{pos.x + size, pos.y};
                 pos.x -= prev_size;
                 pos.y += size;
                 break;
             case 2:
-                DrawLineBezierQuad(
-                        Vector2{pos.x + size, pos.y},
-                        Vector2{pos.x, pos.y + size},
-                        Vector2{pos.x + size, pos.y + size},
-                        1,
-                        WHITE
-                        );
+                curve_points[0] = Vector2{pos.x + size, pos.y};
+                curve_points[1] = Vector2{pos.x, pos.y + size};
+                curve_points[2] = Vector2{pos.x + size, pos.y + size};
                 pos.x -= next_size;
                 pos.y -= prev_size;
                 break;
             case 3:
-                DrawLineBezierQuad(
-                        pos,
-                        Vector2{pos.x + size, pos.y + size},
-                        Vector2{pos.x, pos.y + size},
-                        1,
-                        WHITE
-                        );
+                curve_points[0] = pos;
+                curve_points[1] = Vector2{pos.x + size, pos.y + size};
+                curve_points[2] = Vector2{pos.x, pos.y + size};
                 pos.y -= next_size;
                 break;
         }
+        DrawLineBezierQuad(
+                curve_points[0],
+                curve_points[1],
+                curve_points[2],
+                1,
+                WHITE
+                );
         prev_size = size;
         size = next_size;
     }
