@@ -5,6 +5,7 @@ CFLAGS = -std=c++20 -Wall `pkg-config --libs --cflags raylib`# -c compile and as
 INCLUDE=-Iinclude# folders to be included, anything following -I is the directory the compiler can now see
 LIBS =-framework IOKit -framework Cocoa -framework OpenGL# libs to be included, anything following -l is a library that is included
 OBJECTS=$(patsubst src/%$(EXTENSION),bin/%.o,$(wildcard src/*$(EXTENSION)))# in bin/%.o format, all of the objects to be compiled
+TARGET=bin/test
 # previous line explained:
 # patsubst replaces the first arg template with the second arg template on the variable in the third arg
 # wildcard gets all the files that comply with its arg
@@ -14,7 +15,7 @@ OBJECTS=$(patsubst src/%$(EXTENSION),bin/%.o,$(wildcard src/*$(EXTENSION)))# in 
 # e.g. bin/main.o bin/File1/.o
 
 all: bin $(OBJECTS)# compile everything
-	$(CC) bin/*.o $(CFLAGS) -o bin/test $(INCLUDE) $(LIBS)
+	$(CC) bin/*.o $(CFLAGS) -o $(TARGET) $(INCLUDE) $(LIBS)
 	
 bin/%.o: src/%$(EXTENSION)# create object file for %
 	$(CC) $< $(CFLAGS) -c -o $@ $(INCLUDE) $(LIBS)
@@ -26,4 +27,4 @@ bin:# create folder bin
 	mkdir bin
 
 test: all# compile everything then run executible
-	bin/test
+	$(TARGET)
